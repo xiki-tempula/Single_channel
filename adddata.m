@@ -1,8 +1,8 @@
 function adddata(databasepath,newfilename)
-global iters_count convergance
+
 K = 10;
 max_iters = 400;
-repeat = 100;
+repeat = 10;
 
 
 [pathstr,database_name,ext] = fileparts(databasepath);
@@ -34,20 +34,30 @@ else
     fprintf('%s has been added to the database. \n', name)
 end
 
-
-allproperties = fieldnames(ClusterData.(['H', name]));
-for i = 1:length(allproperties)
-    ClusterNumber = allproperties{i};
-    if (length(ClusterNumber) >= 7)
-        if strcmp(ClusterNumber(1:7), 'Cluster')
-            
-            %if ~isfield(ClusterData.(['H', name]).(ClusterNumber), 'CostStd')
-            %    fprintf('%s has not been analyzed using Nearest K-means. \n', ClusterNumber)
-            %    fprintf('Start calculating the cost function of %s. \n', ClusterNumber)
-
-                %ClusterData.(['H', name]).(ClusterNumber) = Kmeans_Clustering(ClusterData.(['H', name]).(ClusterNumber), K, max_iters, repeat);
-            %end
+for i = 1:length(ClusterData.(['H', name]).Cluster)
+    if ~isfield(ClusterData.(['H', name]).Cluster(i), 'CostStd')
+        plot_original_data(ClusterData.(['H', name]).Cluster(i))
+        
+        fprintf('Cluster %u has not been analyzed using Nearest K-means. \n', i)
+        fprintf('Start calculating the cost function of Cluster %u. \n', i)
+        fprintf('Choosing the way of looking at K-means iteration \n')
+        prompt = 'repeat for each repeat and iteration for each iteration';
+        show_process = lower(input(prompt,'s'));
+        if isempty(show_process)
+            show_process = 'off';
+        elseif strcmp(show_process, 'r')
+            show_process = 'repeat';
+        elseif strcmp(show_process, 'i')
+            show_process = 'iteration';
+        elseif (strcmp(show_process, 'repeat') || strcmp(show_process, 'iteration'))
+        else
+            fprintf('Input (%s) is not recognised. By default, hide the process \n', show_process)
+            show_process = 'off';
         end
+        ClusterData.(['H', name]).Cluster(i) = Kmeans_Clustering_hw(...
+            ClusterData.(['H', name]).Cluster(i), K, max_iters, repeat, ...
+            show_process);
+         
     end
 end
 

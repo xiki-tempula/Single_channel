@@ -1,5 +1,5 @@
 function [centroids, idx] = runkMeans(X, initial_centroids, ...
-                                      max_iters)
+                                      max_iters, show_process)
 %RUNKMEANS runs the K-Means algorithm on data matrix X, where each column of X
 %is a single example
 
@@ -23,8 +23,13 @@ for i=1:max_iters
         idx = findClosestCentroids(X, centroids);
     else
         centroids = computeCentroids(X, idx, K);
-    
     end
+    
+    if strcmp(show_process, 'iteration')
+        plot_Kmeans(X, idx, centroids)
+    end
+    
+    
     
     if previous == idx
         convergance = 1;
