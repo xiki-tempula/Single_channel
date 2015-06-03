@@ -14,6 +14,8 @@ if isempty(FolderPath)
 else
     if exist(FolderPath , 'dir')
         listing = dir(FolderPath);
+    elseif exist([fileparts(mfilename('fullpath')) filesep FolderPath], 'dir')
+        listing = dir(FolderPath);
     else
         fprintf('%s is not found.', ...
         FolderPath)
