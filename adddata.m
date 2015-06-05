@@ -34,6 +34,7 @@ else
     fprintf('%s has been added to the database. \n', name)
 end
 
+%{
 for i = 1:length(ClusterData.(['H', name]).Cluster)
     if ~isfield(ClusterData.(['H', name]).Cluster(i), 'CostStd')
         plot_original_data(ClusterData.(['H', name]).Cluster(i))
@@ -60,5 +61,6 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
          
     end
 end
+%}
 
 save(databasepath, 'ClusterData')
