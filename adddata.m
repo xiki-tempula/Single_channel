@@ -19,6 +19,9 @@ if exist(databasepath, 'file') == 2
 else
     fprintf('Database %s is not found. \n', database_name)
     ClusterData = struct;
+    ClusterData.summary = [];
+
+    
     fprintf('Database %s is created. \n', database_name)
 end
 
@@ -62,5 +65,5 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
     end
 end
 %}
-
+ClusterData = update_summary(ClusterData);
 save(databasepath, 'ClusterData')
