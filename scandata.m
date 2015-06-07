@@ -1,4 +1,8 @@
 function scandata(FolderPath)
+global weight
+weight = ones(1,3);
+
+
 if isempty(FolderPath)
     [pathstr,name,ext] = fileparts(mfilename('fullpath'));
     FolderPath = [pathstr filesep 'data'];
@@ -37,6 +41,7 @@ for i = 3:length(listing)
         adddata([FolderPath '.mat'],[FolderPath filesep name])
     end
 end
+
 
 
     

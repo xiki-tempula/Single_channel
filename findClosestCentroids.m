@@ -5,6 +5,8 @@ function idx = findClosestCentroids(X, centroids)
 %   vector of centroid assignments (i.e. each entry in range [1..K])
 %
 
+global weight
+
 % Set K
 K = size(centroids, 2);
 
@@ -22,14 +24,27 @@ idx = zeros(1, size(X,2));
 %
 
 
+addweight = true;
 
-for a = 1:size(X,2)
-    J = zeros(1,K);
-    for b = 1:K
-        J(1,b) = sum((X(:,a)-centroids(:,b)).^2);
+while addweight
+    for a = 1:size(X,2)
+        J = zeros(1,K);
+        for b = 1:K
+            J(1,b) = weight * (X(:,a)-centroids(:,b)).^2;
+        end
+        [M idx(a)] = min(J);       
     end
-    [M idx(a)] = min(J);       
+    
+    [idx, centroids] = sort_idx(idx, centroids);
+    repeat = check_repeat(idx);
+    if repeat == true
+        weight(3) = weight(3)+1;
+        fprintf('Weight for the event time is too small. Now becomes %u \n', weight(3))
+    else
+        addweight = false;
+    end
 end
+
 
 
 

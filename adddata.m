@@ -1,6 +1,6 @@
 function adddata(databasepath,newfilename)
 
-K = 10;
+K = 8;
 max_iters = 400;
 repeat = 10;
 
@@ -37,9 +37,9 @@ else
     fprintf('%s has been added to the database. \n', name)
 end
 
-%{
+
 for i = 1:length(ClusterData.(['H', name]).Cluster)
-    if ~isfield(ClusterData.(['H', name]).Cluster(i), 'CostStd')
+    if isempty(ClusterData.(['H', name]).Cluster(i).Cost)
         plot_original_data(ClusterData.(['H', name]).Cluster(i))
         
         fprintf('Cluster %u has not been analyzed using Nearest K-means. \n', i)
@@ -64,6 +64,6 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
          
     end
 end
-%}
+
 ClusterData = update_summary(ClusterData);
 save(databasepath, 'ClusterData')

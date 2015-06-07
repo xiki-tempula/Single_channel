@@ -1,14 +1,27 @@
-function [centroids, idx] = runkMeans(X, initial_centroids, ...
+function [centroids, idx] = runkMeans(X, K, ...
                                       max_iters, show_process)
 %RUNKMEANS runs the K-Means algorithm on data matrix X, where each column of X
 %is a single example
 
+% turn on feature scaling and mean normalisation
+normalisation = true;
+
+if ~normalisation
+    means = zeros(size(X,2), 1);
+    STD = ones(size(X,2), 1);
+else
+    means = mean(X,2);
+    STD = std(X,[],2);
+    X = (X - means * ones(1,size(X,2)))./(STD * ones(1,size(X,2)));
+end
+
 % Initialize values
 global iters_count convergance
-K = size(initial_centroids, 2);
-centroids = initial_centroids;
+centroids = kMeansInitCentroids(X, K);
 idx = zeros(1,size(X,2));
-previous = idx;
+previous = zeros(2^K,length(idx));
+
+
 % Run K-Means
 fprintf('Start runing K-means.')
 for i=1:max_iters
@@ -30,13 +43,22 @@ for i=1:max_iters
     end
     
     
+
     
-    if previous == idx
-        convergance = 1;
-        iters_count = 0;
+    for j = 1:size(previous,1)
+        if previous(j,:) == idx
+            convergance = 1;
+            iters_count = 0;
+            break
+        end
+    end
+    
+    previous(1:end-1,:) = previous(2:end,:);
+    previous(end,:) = idx;
+    
+    if convergance == 1
         break
     end
-    previous = idx;
 end
 fprintf('\n')
 
@@ -46,19 +68,9 @@ if i == max_iters
     convergance = 0;
 end
 
-oldidx = idx;
-oldcentroids = centroids;
+[idx, centroids] = sort_idx(idx, centroids);
 
-idx = [];
-centroids = [];
-
-for i = 1:K
-    centroids = [centroids oldcentroids(:,oldidx(1))];
-    idx = [idx ones(1, length(find(oldidx == oldidx(1)))) * i];
-    oldidx(oldidx == oldidx(1)) = [];
-end
-
-
+centroids = centroids.*(STD*ones(1,K)) + means*ones(1,K);
     
 
 
