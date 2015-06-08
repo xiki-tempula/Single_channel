@@ -1,6 +1,6 @@
 function adddata(databasepath,newfilename)
 
-K = 8;
+K = 10;
 max_iters = 400;
 repeat = 10;
 

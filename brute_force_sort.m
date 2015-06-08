@@ -5,39 +5,47 @@ X_length = length(X);
 data.Cost = zeros(1,K);
 data.idx = zeros(K, X_length);
 
-for i = 1:K
+start = 1;
+stop = X_length;
+
+data.Cost(1) = sum(sum((X - mean(X, 2) * ones(1, X_length)).^2));
+data.idx(1,:) = ones(1, X_length);
+
+for i = 2:K
     fprintf('Fitting data to %u modes. \n', i)
-    Combinations  = combnk(1:X_length - 1, i-1);
-    if i == 1
-        Combinations_number = 1;
-    else
-        Combinations_number = size(Combinations,1);
-    end
-    min_cost = Inf;
-    start = [ones(Combinations_number, 1), Combinations];
-    stop = [Combinations + 1, ones(Combinations_number, 1) * X_length];
     
-    for j = 1:Combinations_number
+    min_cost = Inf;
+    for j = 1:(X_length -1)
+        temp_start = sort([start, j]);
+        temp_stop = sort([stop, j+1]);
+        
+        mode_number = length(temp_stop);
+        
         trial_cost = 0;
-        trial_number = size(start,2);
-        for k = 1:trial_number
-            trial_data = X(:, start(j, k): stop(j, k));
-            trial_length = stop(j, k) - start(j, k) + 1;
+        
+        for k = 1:mode_number
+            trial_data = X(:, temp_start(k): temp_stop(k));
+            trial_length = temp_stop(k) - temp_start(k) + 1;
             trial_cost = trial_cost + sum(sum((trial_data...
                 - mean(trial_data, 2)*ones(1, trial_length)).^2));
         end
+        
         if trial_cost < min_cost
             min_cost = trial_cost;
             min_idx = j;
         end
     end
     
-    min_start = start(min_idx,:);
-    min_stop = stop(min_idx,:);
+    data.Cost(i) = min_cost;
+    
+    start = sort([start, min_idx]);
+    stop = sort([stop, min_idx+1]);
     
     for j = 1:i
-        data.idx(i, min_start(j):min_stop(j)) = ones(1, (min_stop(j) - min_start(j) + 1)) * j;
+        data.idx(i, start(j):stop(j)) = ones(1, (stop(j) - start(j) + 1)) * j;
     end
+    
+    %plot_Kmeans([X; data.eventtime], data.idx(i, :))
 end
 data.NormalisedCost = data.Cost / max(data.Cost);
     

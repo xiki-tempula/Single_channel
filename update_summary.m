@@ -18,17 +18,17 @@ for i = 2:length(patch_name)
     if ~patch_exist
         cluster_data = ClusterData.(patch_name{i}).Cluster;
         for j = 1:length(cluster_data)
-            new_cluster = struct(...
-            'patch_name', patch_name{i},...
-            'cluster_name', j,...
-            'starttime', cluster_data(j).starttime,...
-            'endtime', cluster_data(j).endtime,...
-            'totalPopen', cluster_data(j).totalPopen,...
-            'mean_amplitude', cluster_data(j).mean_amplitude,...
-            'clusterduration', cluster_data(j). clusterduration);
-            
-            new_cluster = struct2table(new_cluster);
-        
+            patch = patch_name{i};
+            patch = {patch};
+            cluster_name = j;
+            starttime = cluster_data(j).starttime;
+            endtime = cluster_data(j).endtime;
+            totalPopen = cluster_data(j).totalPopen;
+            mean_amplitude = cluster_data(j).mean_amplitude;
+            clusterduration = cluster_data(j). clusterduration;
+            new_cluster = table(patch, cluster_name, starttime, endtime,...
+                totalPopen, mean_amplitude, clusterduration);
+
             ClusterData.summary = [ClusterData.summary; new_cluster];
         end
     end

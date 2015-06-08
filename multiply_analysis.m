@@ -29,7 +29,7 @@ for i = 2:length(patch_name)
             figure(3)
             hold on
             plot(1:length(cluster_detail.NormalisedCost),...
-                cluster_detail.NormalisedCost, )
+                cluster_detail.NormalisedCost)
             hold off
         elseif strcmp('open_close_distrubition', namearg)
             plotopenclose(cluster_detail)
