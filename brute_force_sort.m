@@ -32,8 +32,12 @@ for i = 1:K
         end
     end
     
+    data.Cost(i) = min_cost;
+    
     min_start = start(min_idx,:);
     min_stop = stop(min_idx,:);
+    
+ 
     
     for j = 1:i
         data.idx(i, min_start(j):min_stop(j)) = ones(1, (min_stop(j) - min_start(j) + 1)) * j;
