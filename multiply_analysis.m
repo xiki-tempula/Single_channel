@@ -11,9 +11,11 @@ end
 
 if strcmp('popen_dist', namearg)
     popen_list = [];
+elseif strcmp('cost_function', namearg)
+    figure(3)
 end
 
-for i = 1:length(patch_name)
+for i = 2:length(patch_name)
     cluster_data = DataStructure.(patch_name{i}).Cluster;
     for j = 1:length(cluster_data)
         cluster_detail = cluster_data(j);
@@ -24,9 +26,11 @@ for i = 1:length(patch_name)
         end
         
         if strcmp('cost_function', namearg)
-            errorbar(1:10,...
-                cluster_detail.NormalisedCostMu,...
-                cluster_detail.NormalisedCostStd)
+            figure(3)
+            hold on
+            plot(1:length(cluster_detail.NormalisedCost),...
+                cluster_detail.NormalisedCost, )
+            hold off
         elseif strcmp('open_close_distrubition', namearg)
             plotopenclose(cluster_detail)
         elseif strcmp('popen_dist', namearg)

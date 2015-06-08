@@ -61,10 +61,13 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
             fprintf('Input (%s) is not recognised. By default, hide the process \n', show_process)
             show_process = 'off';
         end
-        
+        ClusterData.(['H', name]).Cluster(i) = brute_force_sort(...
+            ClusterData.(['H', name]).Cluster(i), K);
+        %{
         ClusterData.(['H', name]).Cluster(i) = Kmeans_Clustering_hw(...
             ClusterData.(['H', name]).Cluster(i), K, max_iters, repeat, ...
             show_process);
+        %}
          
     end
 end
