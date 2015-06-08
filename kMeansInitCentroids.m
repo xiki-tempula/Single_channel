@@ -5,6 +5,7 @@ function centroids = kMeansInitCentroids(X, K)
 %   used with the K-Means on the dataset X
 
 randidx = randperm(size(X, 2), K);
+randidx = sort(randidx);
 centroids = X(:,randidx);
 
 end

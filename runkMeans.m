@@ -4,11 +4,11 @@ function [centroids, idx] = runkMeans(X, K, ...
 %is a single example
 
 % turn on feature scaling and mean normalisation
-normalisation = true;
+normalisation = false;
 
 if ~normalisation
-    means = zeros(size(X,2), 1);
-    STD = ones(size(X,2), 1);
+    means = zeros(size(X,1), 1);
+    STD = ones(size(X,1), 1);
 else
     means = mean(X,2);
     STD = std(X,[],2);
@@ -24,6 +24,7 @@ previous = zeros(2^K,length(idx));
 
 % Run K-Means
 fprintf('Start runing K-means.')
+
 for i=1:max_iters
     
     % Output progress
@@ -42,7 +43,9 @@ for i=1:max_iters
         plot_Kmeans(X, idx, centroids)
     end
     
-    
+    if numel(idx) == 0
+        pass
+    end
 
     
     for j = 1:size(previous,1)
@@ -68,7 +71,7 @@ if i == max_iters
     convergance = 0;
 end
 
-[idx, centroids] = sort_idx(idx, centroids);
+
 
 centroids = centroids.*(STD*ones(1,K)) + means*ones(1,K);
     

@@ -24,9 +24,9 @@ idx = zeros(1, size(X,2));
 %
 
 
-addweight = true;
+%addweight = true;
 
-while addweight
+%while addweight
     for a = 1:size(X,2)
         J = zeros(1,K);
         for b = 1:K
@@ -35,7 +35,13 @@ while addweight
         [M idx(a)] = min(J);       
     end
     
-    [idx, centroids] = sort_idx(idx, centroids);
+    if numel(idx) == 0
+        pass
+    end
+    
+
+
+    %{
     repeat = check_repeat(idx);
     if repeat == true
         weight(3) = weight(3)+1;
@@ -43,7 +49,12 @@ while addweight
     else
         addweight = false;
     end
-end
+    
+    if idx ~= sort(idx)
+        [idx, centroids] = sort_idx(idx, centroids);
+    end
+    %}
+%end
 
 
 
@@ -53,5 +64,5 @@ end
 
 % =============================================================
 
-end
+
 
