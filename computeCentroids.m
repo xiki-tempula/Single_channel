@@ -16,7 +16,7 @@ function centroids = computeCentroids(X, idx, K)
 % You need to return the following variables correctly.
 centroids = zeros(m, K);
 
-for i=1:K
+for i = unique(idx)
     centroids(:,i) = mean(X(:,idx == i), 2);
 end
 

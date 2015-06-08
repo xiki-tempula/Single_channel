@@ -1,6 +1,8 @@
 function adddata(databasepath,newfilename)
 
-K = 8;
+global weight
+weight = ones(1,3);
+K = 7;
 max_iters = 400;
 repeat = 10;
 
@@ -40,7 +42,7 @@ end
 
 for i = 1:length(ClusterData.(['H', name]).Cluster)
     if isempty(ClusterData.(['H', name]).Cluster(i).Cost)
-        %plot_original_data(ClusterData.(['H', name]).Cluster(i))
+        plot_original_data(ClusterData.(['H', name]).Cluster(i))
         
         fprintf('Cluster %u has not been analyzed using Nearest K-means. \n', i)
         fprintf('Start calculating the cost function of Cluster %u. \n', i)
@@ -48,7 +50,7 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
         prompt = 'repeat for each repeat and iteration for each iteration';
         
         show_process = 'off';
-        %show_process = lower(input(prompt,'s'));
+        show_process = lower(input(prompt,'s'));
         
         if isempty(show_process)
             show_process = 'off';

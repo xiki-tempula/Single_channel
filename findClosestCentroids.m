@@ -10,23 +10,15 @@ global weight
 % Set K
 K = size(centroids, 2);
 
-% You need to return the following variables correctly.
+
 idx = zeros(1, size(X,2));
 
-% ====================== YOUR CODE HERE ======================
-% Instructions: Go over every example, find its closest centroid, and store
-%               the index inside idx at the appropriate location.
-%               Concretely, idx(i) should contain the index of the centroid
-%               closest to example i. Hence, it should be a value in the 
-%               range 1..K
-%
-% Note: You can use a for-loop over the examples to compute this.
-%
 
 
-%addweight = true;
 
-%while addweight
+addweight = true;
+
+while addweight
     for a = 1:size(X,2)
         J = zeros(1,K);
         for b = 1:K
@@ -41,7 +33,7 @@ idx = zeros(1, size(X,2));
     
 
 
-    %{
+    
     repeat = check_repeat(idx);
     if repeat == true
         weight(3) = weight(3)+1;
@@ -53,8 +45,8 @@ idx = zeros(1, size(X,2));
     if idx ~= sort(idx)
         [idx, centroids] = sort_idx(idx, centroids);
     end
-    %}
-%end
+    
+end
 
 
 

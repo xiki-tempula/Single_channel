@@ -1,6 +1,5 @@
 function scandata(FolderPath)
-global weight
-weight = ones(1,3);
+
 
 
 if isempty(FolderPath)

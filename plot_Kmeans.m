@@ -2,7 +2,7 @@ function plot_Kmeans(X, idx, centroids)
 
 
 if length(unique(idx)) > 1
-    hFig = figure;
+    %hFig = figure;
     cmp = colormap(parula(length(unique(idx))));
     % Create empty figure with two axis and correct x & y range, then make
     % them invisible.
@@ -40,8 +40,8 @@ if length(unique(idx)) > 1
             'MarkerFaceColor', cmp(i,:))
         hold(hAx(2), 'off');
     end
-    pause
-    close(hFig)
+    %pause
+    %close(hFig)
 end
 
 
