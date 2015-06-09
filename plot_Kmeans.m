@@ -1,4 +1,4 @@
-function plot_Kmeans(X, idx)
+function plot_Clustering(X, idx)
 
 
 if length(unique(idx)) > 1

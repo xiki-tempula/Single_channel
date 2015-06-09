@@ -5,8 +5,8 @@ if ~isfield(DataStructure, 'Cluster')
     patch_name = fieldnames(DataStructure);
 else
     % The input is only one patch with multiply clusters.
-    patch_name = {'patch'};
-    DataStructure = struct('patch', DataStructure);
+    patch_name = {'summary', 'patch'};
+    DataStructure = struct('summary', [], 'patch', DataStructure);
 end
 
 if strcmp('popen_dist', namearg)
@@ -27,10 +27,17 @@ for i = 2:length(patch_name)
         
         if strcmp('cost_function', namearg)
             figure(3)
+            subplot(2,1,1)
             hold on
-            plot(1:length(cluster_detail.NormalisedCost),...
-                cluster_detail.NormalisedCost)
+            plot(1:length(cluster_detail.Cost),...
+                cluster_detail.Cost)
             hold off
+            subplot(2,1,2)
+            hold on
+            plot(1:length(cluster_detail.Normaliseddiff),...
+                cluster_detail.Normaliseddiff)
+            hold off
+            
         elseif strcmp('open_close_distrubition', namearg)
             plotopenclose(cluster_detail)
         elseif strcmp('popen_dist', namearg)

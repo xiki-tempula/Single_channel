@@ -8,9 +8,11 @@ data.idx = zeros(K, X_length);
 start = 1;
 stop = X_length;
 
-data.Cost(1) = sum(sum((X - mean(X, 2) * ones(1, X_length)).^2));
+data.Cost(1) = sum(sum((X - repmat(mean(X, 2), 1, X_length)).^2));
 data.idx(1,:) = ones(1, X_length);
 
+normalisation = zeros(1,K);
+normalisation(1) = data.Cost(1);
 for i = 2:K
     fprintf('Fitting data to %u modes. \n', i)
     
@@ -27,7 +29,7 @@ for i = 2:K
             trial_data = X(:, temp_start(k): temp_stop(k));
             trial_length = temp_stop(k) - temp_start(k) + 1;
             trial_cost = trial_cost + sum(sum((trial_data...
-                - mean(trial_data, 2)*ones(1, trial_length)).^2));
+                - repmat(mean(trial_data, 2), 1, trial_length)).^2));
         end
         
         if trial_cost < min_cost
@@ -36,20 +38,24 @@ for i = 2:K
         end
     end
     
-    data.Cost(i) = min_cost;
-    
-    start = sort([start, min_idx]);
-    stop = sort([stop, min_idx+1]);
-    
-    for j = 1:i
-        data.idx(i, start(j):stop(j)) = ones(1, (stop(j) - start(j) + 1)) * j;
-    end
-    
-    %plot_Kmeans([X; data.eventtime], data.idx(i, :))
+
 end
-data.NormalisedCost = data.Cost / max(data.Cost);
-    
-           
+
+
+
+for i = 2:K
+    temp_width = floor(X_length / i);
+    temp_X = X(:,1:temp_width*i);
+    temp_X = reshape(temp_X, [2, temp_width, i]);
+    temp_X = (temp_X - repmat(mean(temp_X, 2), 1, temp_width, 1)).^2;
+    normalisation(i) = sum(sum(sum(temp_X)));
+end
+
+normalisation = normalisation(1) - normalisation;
+normalised_cost = data.Cost(1) - data.Cost;
+data.Normaliseddiff = normalised_cost - normalisation;
+
+data.Cost = data.Cost / data.Cost(1);
     
     
     

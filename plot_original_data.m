@@ -20,3 +20,4 @@ plot_amp(2:2:end) = cluster.amplitude;
 
 figure
 plot(plot_time, plot_amp, 'k')
+xlim([min(plot_time), max(plot_time)])
