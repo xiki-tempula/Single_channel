@@ -37,7 +37,16 @@ for i = 2:K
             min_idx = j;
         end
     end
+    data.Cost(i) = min_cost;
     
+    start = sort([start, min_idx]);
+    stop = sort([stop, min_idx+1]);
+    
+    for j = 1:i
+        data.idx(i, start(j):stop(j)) = ones(1, (stop(j) - start(j) + 1)) * j;
+    end
+    
+    %plot_Kmeans([X; data.eventtime], data.idx(i, :))
 
 end
 
