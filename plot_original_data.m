@@ -18,6 +18,7 @@ plot_amp = ones(1,length(plot_time));
 plot_amp(1:2:end) = cluster.amplitude;
 plot_amp(2:2:end) = cluster.amplitude;
 
-figure
+figure(1)
+clf;
 plot(plot_time, plot_amp, 'k')
 xlim([min(plot_time), max(plot_time)])
