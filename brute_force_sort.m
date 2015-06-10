@@ -107,6 +107,9 @@ data.probability = ...
     (mean(data.Normaliseddiff(2:data.mode_number))) /...
     (mean(data.Normaliseddiff(data.mode_number+1:end)));
 
+if data.probability <= 4
+    data.mode_number = 1;
+end
 %fprintf('Number of stds min %u max %u range %f. \n',...
 %    min_number_std, max_number_std, max_number_std/min_number_std)
 
