@@ -42,13 +42,14 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
     if isempty(ClusterData.(['H', name]).Cluster(i).Cost)
         %plot_original_data(ClusterData.(['H', name]).Cluster(i))
         
+        %{
         fprintf('Cluster %u has not been analyzed using Nearest K-means. \n', i)
         fprintf('Start calculating the cost function of Cluster %u. \n', i)
         fprintf('Choosing the way of looking at K-means iteration \n')
         prompt = 'repeat for each repeat and iteration for each iteration';
         
         show_process = 'off';
-        %show_process = lower(input(prompt,'s'));
+        show_process = lower(input(prompt,'s'));
         
         if isempty(show_process)
             show_process = 'off';
@@ -61,7 +62,7 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
             fprintf('Input (%s) is not recognised. By default, hide the process \n', show_process)
             show_process = 'off';
         end
-        
+        %}
         
         ClusterData.(['H', name]).Cluster(i) = brute_force_sort(...
             ClusterData.(['H', name]).Cluster(i), K);
@@ -75,6 +76,7 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
             pause
         end
         %}
+            
         %plot_Clustering(ClusterData.(['H', name]).Cluster(i))
         %multiply_analysis(ClusterData.(['H', name]).Cluster(i), 'cost_function')
         %multiply_analysis(ClusterData.(['H', name]).Cluster(i), 'Plot_open/close')

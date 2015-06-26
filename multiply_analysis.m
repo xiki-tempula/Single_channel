@@ -24,6 +24,8 @@ elseif strcmp('maxmin_open/close', namearg)
     maxclose = 0;
     minopen = Inf;
     minclose = Inf;
+elseif strcmp('total_close', namearg)
+    total_close = [];
 end
 
 % Doing the analysis
@@ -55,6 +57,7 @@ for i = 2:length(patch_name)
             hold off
             subplot(2,1,2)
             hold on
+            
             plot(2:length(cluster_detail.Normaliseddiff),...
                 cluster_detail.Normaliseddiff(2:end))
             plot(mode_number, cluster_detail.Normaliseddiff(mode_number), 'o')
@@ -64,6 +67,7 @@ for i = 2:length(patch_name)
             
             plot(2:10, ones(1,9) * (cluster_detail.normalisation_mu...
                 + 25* cluster_detail.normalisation_std))
+            
             
             hold off
             
@@ -94,6 +98,8 @@ for i = 2:length(patch_name)
             xlabel('Open time (ms/log scale)')
             ylabel('Shut time (ms/log scale)')
                 
+        elseif strcmp('total_close', namearg)
+            total_close = [total_close, cluster_detail.closetime];
             
         end
     end
@@ -106,5 +112,6 @@ elseif strcmp('probability', namearg)
     result = probability_array;
 elseif strcmp('maxmin_open/close', namearg)
     result = [maxopen, minopen, maxclose, minclose];
-    
+elseif strcmp('total_close', namearg)
+    result = total_close;
 end

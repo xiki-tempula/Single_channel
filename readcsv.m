@@ -48,13 +48,15 @@ end
 stop = [stop length(EndTime)];
 start = sort(start);
 stop = sort(stop);
-disp(start)
-disp(stop)
+
 % Discard the cluster if the cluster length is less than 100ms
 discard_list = [];
 if length(start) > 2
     for i = 1:length(stop)
         if sum(Duration(start(i):stop(i))) < 100
+            discard_list = [discard_list i];
+        end
+        if (stop(i) - start(i)) < 10
             discard_list = [discard_list i];
         end
     end
@@ -82,6 +84,7 @@ data.Cluster = struct(...
         'normalisation_mu', {},...
         'normalisation_std', {},...
         'mode_number', {},...
+        'elbow_list', {},...
         'probability', {});
 
 
@@ -131,6 +134,7 @@ for i = 1:length(start)
         'normalisation_mu', [],...
         'normalisation_std', [],...
         'mode_number', [],...
+        'elbow_list', [],...
         'probability', []);
     
     %data = setfield(data,['Cluster', num2str(i)],Cluster);
