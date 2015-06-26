@@ -34,9 +34,13 @@ Duration = out(5,:);
 start = 1;
 stop = double.empty(0,0);
 for i = 1:length(EndTime)-1
-    % Separate the different cluster if the end time is 100ms later
-    % than the previous start stime.
-    if (StartTime(i+1) - EndTime(i)) > 100
+    % Separate the different cluster if the end time is not the same as
+    % the previous start stime.
+    if StartTime(i+1) ~= EndTime(i)
+        start = [start i+1];
+        stop = [stop i];
+    % Separate the Cluster if a closing is longer than 100ms
+    elseif (ChannelState(i) == 0) && (Duration(i) > 100)
         start = [start i+1];
         stop = [stop i];
     end
@@ -44,15 +48,21 @@ end
 stop = [stop length(EndTime)];
 start = sort(start);
 stop = sort(stop);
-
+disp(start)
+disp(stop)
 % Discard the cluster if the cluster length is less than 100ms
+discard_list = [];
 if length(start) > 2
     for i = 1:length(stop)
         if sum(Duration(start(i):stop(i))) < 100
-            start(i) = [];
-            stop(i) = [];
+            discard_list = [discard_list i];
         end
     end
+    for i = fliplr(discard_list)
+        start(i) = [];
+        stop(i) = [];
+    end
+        
 end
 
 data.Cluster = struct(...

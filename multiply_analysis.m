@@ -1,5 +1,6 @@
 function result = multiply_analysis(DataStructure, namearg, plotoriginal)
 
+% Idetify the input pattern
 if isfield(DataStructure, 'summary')
     % Check whether the input is a structure with multiply patches
     patch_name = fieldnames(DataStructure);
@@ -13,12 +14,19 @@ else
     DataStructure = struct('summary', [], 'patch', DataStructure);
 end
 
+%initialising the parameter
 if strcmp('popen_dist', namearg)
     popen_list = [];
 elseif strcmp('probability', namearg)
     probability_array = [];
+elseif strcmp('maxmin_open/close', namearg)
+    maxopen = 0;
+    maxclose = 0;
+    minopen = Inf;
+    minclose = Inf;
 end
 
+% Doing the analysis
 for i = 2:length(patch_name)
     cluster_data = DataStructure.(patch_name{i}).Cluster;
     for j = 1:length(cluster_data)
@@ -65,12 +73,38 @@ for i = 2:length(patch_name)
             popen_list = [popen_list cluster_detail.totalPopen];
         elseif strcmp('probability', namearg)
             probability_array = [probability_array, cluster_detail.probability];
+        elseif strcmp('maxmin_open/close', namearg)
+            if maxopen < max(cluster_detail.opentime)
+                maxopen = max(cluster_detail.opentime);
+            end
+            if maxclose < max(cluster_detail.closetime)
+                maxclose = max(cluster_detail.closetime);
+            end
+            if minopen > min(cluster_detail.opentime)
+                minopen = min(cluster_detail.opentime);
+            end
+            if minclose > min(cluster_detail.closetime)
+                minclose = min(cluster_detail.closetime);
+            end
+        elseif strcmp('Plot_open/close', namearg)
+            figure(4)
+            loglog(cluster_detail.opentime, cluster_detail.closetime, 'o')
+            xlim([exp(-4), exp(5)])
+            ylim([exp(-4), exp(7)])
+            xlabel('Open time (ms/log scale)')
+            ylabel('Shut time (ms/log scale)')
+                
+            
         end
     end
 end
 
+% Format output
 if strcmp('popen_dist', namearg)
     histogram(popen_list) ;
 elseif strcmp('probability', namearg)
     result = probability_array;
+elseif strcmp('maxmin_open/close', namearg)
+    result = [maxopen, minopen, maxclose, minclose];
+    
 end

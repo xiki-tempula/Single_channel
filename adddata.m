@@ -62,10 +62,10 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
             show_process = 'off';
         end
         
-        tic;
+        
         ClusterData.(['H', name]).Cluster(i) = brute_force_sort(...
             ClusterData.(['H', name]).Cluster(i), K);
-        toc;
+        
         %{
         if any(ClusterData.(['H', name]).Cluster(i).Normaliseddiff > 100)...
                 || any(ClusterData.(['H', name]).Cluster(i).Normaliseddiff < -10)
@@ -77,7 +77,7 @@ for i = 1:length(ClusterData.(['H', name]).Cluster)
         %}
         %plot_Clustering(ClusterData.(['H', name]).Cluster(i))
         %multiply_analysis(ClusterData.(['H', name]).Cluster(i), 'cost_function')
-        
+        %multiply_analysis(ClusterData.(['H', name]).Cluster(i), 'Plot_open/close')
         %pause
          
     end
