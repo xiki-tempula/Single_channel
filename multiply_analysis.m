@@ -13,12 +13,10 @@ else
     DataStructure = struct('summary', [], 'patch', DataStructure);
 end
 
-if strcmp('popen_dist', namearg)
-    popen_list = [];
-elseif strcmp('probability', namearg)
+if strcmp('probability', namearg)
     probability_array = [];
 end
-
+result = [];
 for i = 2:length(patch_name)
     cluster_data = DataStructure.(patch_name{i}).Cluster;
     for j = 1:length(cluster_data)
@@ -61,16 +59,40 @@ for i = 2:length(patch_name)
             
         elseif strcmp('open_close_distrubition', namearg)
             plotopenclose(cluster_detail)
-        elseif strcmp('popen_dist', namearg)
-            popen_list = [popen_list cluster_detail.totalPopen];
+        elseif strcmp('popen_mode', namearg)
+            temp_idx = cluster_detail.idx(cluster_detail.mode_number,:);
+            for k = 1: cluster_detail.mode_number
+                temp_open = cluster_detail.opentime(temp_idx == k);
+                temp_close = cluster_detail.closetime(temp_idx == k);
+                result = [result, sum(temp_open)/(sum(temp_open) + sum(temp_close))];
+            end
+        elseif strcmp('popen_cluster', namearg)
+            temp_open = cluster_detail.opentime;
+            temp_close = cluster_detail.closetime;
+            result = [result, sum(temp_open)/(sum(temp_open) + sum(temp_close))];
         elseif strcmp('probability', namearg)
             probability_array = [probability_array, cluster_detail.probability];
+        elseif strcmp('mode_number', namearg)
+            result = [result cluster_detail.mode_number];
+        elseif strcmp('ln_mu_mode', namearg)
+            temp_idx = cluster_detail.idx(cluster_detail.mode_number,:);
+            for k = 1: cluster_detail.mode_number
+                temp_open = cluster_detail.opentime(temp_idx == k);
+                mu_ln_open = mean(log(temp_open));
+                temp_close = cluster_detail.closetime(temp_idx == k);
+                mu_ln_close = mean(log(temp_close));
+                result = [result [mu_ln_open; mu_ln_close]];
+            end
+        elseif strcmp('ln_mu_cluster', namearg)
+            temp_open = cluster_detail.opentime;
+            mu_ln_open = mean(log(temp_open));
+            temp_close = cluster_detail.closetime;
+            mu_ln_close = mean(log(temp_close));
+            result = [result [mu_ln_open; mu_ln_close]];
         end
     end
 end
 
-if strcmp('popen_dist', namearg)
-    histogram(popen_list) ;
-elseif strcmp('probability', namearg)
+if strcmp('probability', namearg)
     result = probability_array;
 end

@@ -15,9 +15,11 @@ data.idx(1,:) = ones(1, X_length);
 normalisation = zeros(1,K + 5);
 normalisation(1) = data.Cost(1);
 
-
-
-
+%{
+[brute_force_idx, brute_force_cost] = brute_force(X);
+fprintf('The idx is %u and %u and the minimum cost function is %f. \n',...
+    brute_force_idx(1), brute_force_idx(2), brute_force_cost)
+%}
 for i = 2:K + 5
     fprintf('Fitting data to %u modes. \n', i)
 
@@ -50,6 +52,7 @@ for i = 2:K + 5
     
     start = sort([start, min_idx + 1]);
     stop = sort([stop, min_idx]);
+    fprintf('The idx is %u and the minimum cost function is %f. \n', min_idx, min_cost)
     if i <= K
         for j = 1:i
             data.idx(i, start(j):stop(j)) = ones(1, (stop(j) - start(j) + 1)) * j;
@@ -103,6 +106,8 @@ min_number_std = ceil((max(data.Normaliseddiff(data.mode_number+1:end))...
 max_number_std = floor((max(data.Normaliseddiff(2:data.mode_number))...
     - data.normalisation_mu) / data.normalisation_std);+
 %}
+
+
 data.probability = ...
     (mean(data.Normaliseddiff(2:data.mode_number))) /...
     (mean(data.Normaliseddiff(data.mode_number+1:end)));
@@ -110,6 +115,8 @@ data.probability = ...
 if data.probability <= 4
     data.mode_number = 1;
 end
+
+
 %fprintf('Number of stds min %u max %u range %f. \n',...
 %    min_number_std, max_number_std, max_number_std/min_number_std)
 
